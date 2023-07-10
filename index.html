@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cubicle Vacancy Indicator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1; 
+    }
+    
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .glass-container {
+      background-color: rgba(135, 206, 235, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      width: 500px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .cubicle {
+      border: 5px solid rgba(0, 0, 0, 1);
+      width: 130px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .circle-image {
+      max-width: 75px;
+    }
+    
+    .cubicle-text {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    
+    .status-text {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+  
+  
+  <script>
+  
+  
+  function sendNotification(motionStatus) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open('POST', 'notification.php', true);
+  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.send('motion_status=' + motionStatus);
+  
+  }
+  
+    function handleMotionDetection() {
+      var motion = digitalRead(pirPin);
+      if (motion == HIGH) {
+        digitalWrite(ledPin, HIGH);
+			document.getElementById('status-condition').textContent = 'Occupied';
+			sendNotification('Occupied');
+      } else {
+        digitalWrite(ledPin, LOW);
+        document.getElementById('status-condition').textContent = 'Not Occupied';
+        sendNotification('Not Occupied');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Cubicle Vacancy Indicator</h1>
+    
+    <div class="glass-container">
+      <h2 class="cubicle-text">Cubicle 1</h2>
+	  <center>
+      <div class="cubicle">
+        <img src="Circle.png" alt="Circle Image" class="circle-image">
+      </div>
+      <p class="status-text">Note: Cubicle is <span id="status-condition">Not Occupied</span></p>
+    </div>
+  </div>
+</body>
+</html>
